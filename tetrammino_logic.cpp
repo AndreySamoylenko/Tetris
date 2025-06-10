@@ -85,11 +85,17 @@ int choose_teromino(){
 bool add_tetromino(int (&map)[10][20], int tetromino_type, int (&tetromino)[4][2]){
     switch (tetromino_type)
     {
-    case 0:
+    case 0: 
+    //[#][#]
+    //[#][#]
+
+
+
 
         
         break;
-    case 1:
+    case 1: 
+    // [#][#][#][#]
         if( !(map[0][3] || map[0][4] || map[0][5] || map[0][6]) )
         {
         map[0][3] = 1;
@@ -106,19 +112,24 @@ bool add_tetromino(int (&map)[10][20], int tetromino_type, int (&tetromino)[4][2
         else return false;
         break;
     case 2:
-        /* code */
+    /* [#]
+       [#][#][#] */
         break;
     case 3:
-        /* code */
+    /* [#][#][#]
+       [#]       */
         break;
     case 4:
-        /* code */
+    /* [#][#]
+          [#][#] */
         break;
     case 5:
-        /* code */
+    /*    [#][#]
+       [#][#]     */
         break;
     case 6:
-        /* code */
+    /* [#][#][#]
+          [#]     */
         break;
     
     default:
