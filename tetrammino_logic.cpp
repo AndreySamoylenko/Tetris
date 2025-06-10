@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <algorithm>
+#include <random>
 using namespace std;
 
 int map[10][20];
@@ -24,7 +25,7 @@ void out(int map[10][20]){
 
 }
 
-void clear(int map[10][20]){
+void clear(int (&map)[10][20]){
     int k = 0;
     for (int i = 19; i >= 0; i--){
         if( map[0][i] && map[1][i] && map[2][i] && map[3][i] && map[4][i] && map[5][i] && map[6][i] && map[7][i] && map[8][i] && map[9][i]){
@@ -44,7 +45,7 @@ void clear(int map[10][20]){
 
 }
 
-bool fall(int map[10][20], int (&tetramino)[4][2]){
+bool fall(int (&map)[10][20], int (&tetramino)[4][2]){
     if(!(map[tetramino[0][0]][tetramino[0][1] + 1] || map[tetramino[1][0]][tetramino[1][1] + 1] ||
        map[tetramino[2][0]][tetramino[2][1] + 1] || map[tetramino[3][0]][tetramino[3][1] + 1] ||
        tetramino[0][1] == 19 || tetramino[1][1] == 19 || tetramino[2][1] == 19 || tetramino[3][1] == 19))
@@ -70,17 +71,47 @@ int choose_teromino(){
     static int curent_tetromino_pos = 13;
 
 
-    if tetro
-
-
-
-
-
-
-
-
-
+    if (curent_tetromino_pos == 19){
+        shuffle(begin(tetromino_list), end(tetromino_list), mt19937{random_device{}()});
+        curent_tetromino_pos = 0;
+    }
+    else{
+        curent_tetromino_pos++;
+    }
+    return tetromino_list[curent_tetromino_pos];
 }
+
+
+bool add_tetromino(int (&map)[10][20], int tetromino_type, int (&tetromino)[4][2]){
+    switch (tetromino_type)
+    {
+    case 0:
+        /* code */
+        break;
+    case 1:
+        /* code */
+        break;
+    case 2:
+        /* code */
+        break;
+    case 3:
+        /* code */
+        break;
+    case 4:
+        /* code */
+        break;
+    case 5:
+        /* code */
+        break;
+    case 6:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
+}
+
 
 int main(){
     for (int i = 0; i < 20; i++){
