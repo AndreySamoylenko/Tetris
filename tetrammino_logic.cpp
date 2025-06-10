@@ -86,10 +86,24 @@ bool add_tetromino(int (&map)[10][20], int tetromino_type, int (&tetromino)[4][2
     switch (tetromino_type)
     {
     case 0:
-        /* code */
+
+        
         break;
     case 1:
-        /* code */
+        if( !(map[0][3] || map[0][4] || map[0][5] || map[0][6]) )
+        {
+        map[0][3] = 1;
+        map[0][4] = 1;
+        map[0][5] = 1;
+        map[0][6] = 1;
+
+        for (int i = 0; i < 4; i++){
+            tetromino[i][0] = 0;
+            tetromino[i][1] = 3 + i;
+        }
+        return true;
+        }
+        else return false;
         break;
     case 2:
         /* code */
