@@ -3,8 +3,10 @@
 #include <algorithm>
 #include <random>
 using namespace std;
-
+// добавить конекты между функциями
 int map[10][20];
+
+/*тетромино первая координата горизонтальная вторая вертикальна*/
 
 /*консольный вывод поля // для тестов*/
 
@@ -88,7 +90,6 @@ int choose_teromino(){
     }
     return tetromino_list[curent_tetromino_pos];
 }
-
 
 /* Добовляет на поле map тетроминошку соответстующего типа, записывая её координаты(поблочно) в tetromino*/
 
@@ -237,6 +238,49 @@ bool add_tetromino(int (&map)[10][20], int tetromino_type, int (&tetromino)[4][2
     }
 }
 
+/* двигает тетроминошку базово вправо, при добавлении 3 параметра отличного от 0 влево*/
+
+bool move(int (&map)[10][20], int (&tetromino)[4][2], bool direction = 0){
+    if(direction){
+        for (int i = 0; i < 4; i++) map[tetromino[i][0]][tetromino[i][1]] = 0;
+        if (!(
+            tetromino[0][0] < 1 || tetromino[1][0] < 1 || tetromino[2][0] < 1 || tetromino[3][0] < 1
+        )){
+            if (!(map[tetromino[0][0]-1][tetromino[0][1]] || map[tetromino[1][0]-1][tetromino[1][1]] || map[tetromino[2][0]-1][tetromino[2][1]] || map[tetromino[3][0]-1][tetromino[3][1]])){
+                for (int i = 0; i < 4; i++) tetromino[i][0]--;
+                for (int i = 0; i < 4; i++){
+                    map[tetromino[i][0]][tetromino[i][1]] = 1;
+                }
+                return 1;
+            }
+        }
+        for (int i = 0; i < 4; i++){
+            map[tetromino[i][0]][tetromino[i][1]] = 1;
+        }
+        return 0;
+    }
+    else{
+        for (int i = 0; i < 4; i++) map[tetromino[i][0]][tetromino[i][1]] = 0;
+        if (!(
+            tetromino[0][0] >= 9 || tetromino[1][0] >= 9 || tetromino[2][0] >= 9 || tetromino[3][0] >= 9
+        )){
+            if (!(map[tetromino[0][0]+1][tetromino[0][1]] || map[tetromino[1][0]+1][tetromino[1][1]] || map[tetromino[2][0]+1][tetromino[2][1]] || map[tetromino[3][0]+1][tetromino[3][1]])){
+                for (int i = 0; i < 4; i++) tetromino[i][0]++;
+                for (int i = 0; i < 4; i++){
+                    map[tetromino[i][0]][tetromino[i][1]] = 1;
+                }
+                return 1;
+            }
+        }
+        for (int i = 0; i < 4; i++){
+            map[tetromino[i][0]][tetromino[i][1]] = 1;
+        }
+        return 0;
+    }
+}
+
+bool rotate();
+
 
 int main(){
     for (int i = 0; i < 20; i++){
@@ -245,14 +289,9 @@ int main(){
         }
     }
     out(map);
-    
-    int tetramino[4][2] =  {{0, -1},
-                            {1, -1},
-                            {2, -1},
-                            {3, -1}};
-
-    add_tetromino(map, 6, tetramino);
-    out(map);
-
+    for (int i = 0; i < 10; i++) map[19][i] = 1;
+    for (int i = 0; i < 10; i++) map[18][i] = 1;
+    int in = 90;
+    int tetromino[4][2];
 
 }
