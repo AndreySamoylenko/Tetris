@@ -293,19 +293,24 @@ int main(){
         break;
     case 2:
         move(tetromino, 1);
+        out();
         break;
     case 3:
         move(tetromino, -1);
+        out();
         break;
     case 4:
         rotate(tetromino, tetromino_type, rotation);
+        out();
         break;
     case 5:
         tetromino_type = choose_teromino();
         add_tetromino(tetromino_type, tetromino, rotation);
+        out();
         break;
     case 6:
         clear();
+        out();
         break;
     default:
         break;
