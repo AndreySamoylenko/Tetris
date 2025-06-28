@@ -2,6 +2,7 @@
 #include <ctime>
 #include <algorithm>
 #include <random>
+#include <chrono>
 using namespace std;
 // добавить конекты между функциями
 
@@ -13,8 +14,9 @@ const int WIDTH = 10;
 const int HEIGHT = 20;
 int tetromino[4][2];
 int tetromino_type;
-int rotation = 0;
 int map[WIDTH][HEIGHT] = {0};
+
+
 /*консольный вывод поля // для тестов*/
 // Вывод игрового поля
 void out() {
@@ -30,7 +32,7 @@ void out() {
 
 /*очищает нижние слои от рядов тетромино*/
 
-void clear() {
+int clear() {
     int lines_cleared = 0;
     
     for (int y = HEIGHT-1; y >= 0; y--) {
@@ -55,6 +57,7 @@ void clear() {
             }
         }
     }
+    return lines_cleared * lines_cleared * lines_cleared * 10;
 }
 
 /*проверка возможности позиции*/
@@ -224,7 +227,7 @@ bool move(int (&tetromino)[4][2], int dx) {
 }
 
 // Поворот фигуры
-bool rotate(int (&tetromino)[4][2], int type, int &rotation_state) {
+bool rotate(int (&tetromino)[4][2], int type) {
     if (type == 0) return true; 
     if (!(tetromino[0][1] && tetromino[1][1] && tetromino[2][1] && tetromino[2][1]) || tetromino[0][1] == 19 || tetromino[1][1] == 19 || tetromino[2][1] == 19 || tetromino[2][1] == 19){
         return 0;
@@ -258,7 +261,6 @@ bool rotate(int (&tetromino)[4][2], int type, int &rotation_state) {
             tetromino[i][1] = new_pos[i][1];
             map[tetromino[i][0]][tetromino[i][1]] = 1;
         }
-        rotation_state = (rotation_state + 1) % 4;
         return true;
     }
     else {
@@ -271,6 +273,35 @@ bool rotate(int (&tetromino)[4][2], int type, int &rotation_state) {
         return false;
     }
 }
+
+// Объединение логики
+bool intputs(int intput){
+    switch (intput){
+        case 1:
+            return fall(tetromino);
+            break;
+        
+        case 2:
+            return move(tetromino, -1);
+            break;
+
+        case 3:
+            return move(tetromino, 1);
+            break;
+        
+        case 4:
+            return rotate(tetromino, tetromino_type)
+            break
+    }
+}
+ 
+int procces(){
+    int score = 0;
+
+
+
+}
+
 
 int main(){
     for (int i = 0; i < 20; i++){
