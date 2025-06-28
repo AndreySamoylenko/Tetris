@@ -226,7 +226,9 @@ bool move(int (&tetromino)[4][2], int dx) {
 // Поворот фигуры
 bool rotate(int (&tetromino)[4][2], int type, int &rotation_state) {
     if (type == 0) return true; 
-    
+    if (!(tetromino[0][1] && tetromino[1][1] && tetromino[2][1] && tetromino[2][1]) || tetromino[0][1] == 19 || tetromino[1][1] == 19 || tetromino[2][1] == 19 || tetromino[2][1] == 19){
+        return 0;
+    }
 
     for (int i = 0; i < 4; i++) {
         int x = tetromino[i][0];
