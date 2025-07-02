@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+#include <thread>
 using namespace std;
 // добавить конекты между функциями
 
@@ -126,7 +127,7 @@ int choose_teromino(){
 
 /* Добовляет на поле map тетроминошку соответстующего типа, записывая её координаты(поблочно) в tetromino*/
 
-bool add_tetromino(int type, int (&tetromino)[4][2],int rotation) {
+bool add_tetromino(int type, int (&tetromino)[4][2]) {
 
     for (int i = 0; i < 4; i++) {
         tetromino[i][0] = 0;
@@ -185,12 +186,9 @@ bool add_tetromino(int type, int (&tetromino)[4][2],int rotation) {
     for (int i = 0; i < 4; i++) {
         map[tetromino[i][0]][tetromino[i][1]] = 1;
     }
-    rotation = 0;
     
     return true;
 }
-
-/* двигает тетроминошку базово вправо, при добавлении 3 параметра отличного от 0 влево*/
 
 // Движение влево/вправо
 bool move(int (&tetromino)[4][2], int dx) {
@@ -290,13 +288,14 @@ bool intputs(int intput){
             break;
         
         case 4:
-            return rotate(tetromino, tetromino_type)
-            break
+            return rotate(tetromino, tetromino_type);
+            break;
     }
 }
  
 int procces(){
     int score = 0;
+    long long lastTime;
 
 
 
@@ -333,12 +332,12 @@ int main(){
         out();
         break;
     case 4:
-        rotate(tetromino, tetromino_type, rotation);
+        rotate(tetromino, tetromino_type);
         out();
         break;
     case 5:
         tetromino_type = choose_teromino();
-        add_tetromino(tetromino_type, tetromino, rotation);
+        add_tetromino(tetromino_type, tetromino);
         out();
         break;
     case 6:
