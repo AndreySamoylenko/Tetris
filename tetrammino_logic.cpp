@@ -4,6 +4,8 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <windows.h>
+#include <cctype>
 using namespace std;
 // добавить конекты между функциями
 
@@ -16,11 +18,13 @@ const int HEIGHT = 20;
 int tetromino[4][2];
 int tetromino_type;
 int map[WIDTH][HEIGHT] = {0};
-
+int inputKey = 5;
+int nextTetromino;
 
 /*консольный вывод поля // для тестов*/
 // Вывод игрового поля
 void out() {
+    system("cls");
     for (int y = 0; y < HEIGHT; y++) {
         cout << '|';
         for(int x = 0; x < WIDTH; x++) {   
@@ -33,7 +37,7 @@ void out() {
 
 /*очищает нижние слои от рядов тетромино*/
 
-int clear() {
+int clear(int &all_lines_cleard) {
     int lines_cleared = 0;
     
     for (int y = HEIGHT-1; y >= 0; y--) {
@@ -58,7 +62,9 @@ int clear() {
             }
         }
     }
-    return lines_cleared * lines_cleared * lines_cleared * 10;
+    all_lines_cleard += lines_cleared;
+    out();
+    return static_cast<int>(lines_cleared * sqrt(lines_cleared) * 10);
 }
 
 /*проверка возможности позиции*/
@@ -95,6 +101,7 @@ bool fall(int (&tetromino)[4][2]) {
             tetromino[i][1]++;
             map[tetromino[i][0]][tetromino[i][1]] = 1;
         }
+        out();
         return true;
     }
     else {
@@ -106,6 +113,7 @@ bool fall(int (&tetromino)[4][2]) {
         }
         return false;
     }
+    
 }
 
 /*выбор случайной тетроминошки адекватым образом + можно отслеживать следущую тетроминошку(лубую следущую из 13 (дальше порядок ролится заново))*/
@@ -186,7 +194,7 @@ bool add_tetromino(int type, int (&tetromino)[4][2]) {
     for (int i = 0; i < 4; i++) {
         map[tetromino[i][0]][tetromino[i][1]] = 1;
     }
-    
+    out();
     return true;
 }
 
@@ -211,6 +219,7 @@ bool move(int (&tetromino)[4][2], int dx) {
             tetromino[i][0] += dx;
             map[tetromino[i][0]][tetromino[i][1]] = 1;
         }
+        out();
         return true;
     }
     else {
@@ -270,10 +279,11 @@ bool rotate(int (&tetromino)[4][2], int type) {
         }
         return false;
     }
+    out();
 }
 
 // Объединение логики
-bool intputs(int intput){
+bool inputs(int intput){
     switch (intput){
         case 1:
             return fall(tetromino);
@@ -290,20 +300,69 @@ bool intputs(int intput){
         case 4:
             return rotate(tetromino, tetromino_type);
             break;
+        default:
+            return 1;
     }
 }
- 
+
+//!!!! нужны нормальные
+
+void updateInput() {
+    char lastKey;
+    for (int k = 8; k <= 255; ++k) {
+        if (GetAsyncKeyState(k) & 0x01) {
+            if (std::isprint(k)) {
+                lastKey = static_cast<char>(k);
+            }
+        }
+    }
+    switch (lastKey) {
+        case 'w': inputKey = 4;
+        case 'a': inputKey = 2;
+        case 'd': inputKey = 3;
+        case 's': inputKey = 1;
+        default:  inputKey = 5;
+    }
+}
+
+long getTimeMs() {
+    return static_cast<long>(clock()) * 1000 / CLOCKS_PER_SEC;
+}
+
+
 int procces(){
     int score = 0;
-    long long lastTime;
+    long nextTime = getTimeMs();
+    bool game = 1;
+    nextTetromino = choose_teromino();
+    add_tetromino(nextTetromino, tetromino);
+    nextTetromino = choose_teromino();
+    while (game)
+    {
+        updateInput();
+        inputs(inputKey);
+        
+        
+        long now = getTimeMs();
+        if (now >= nextTime){
+            nextTime = now + 750 - score * 0.5;
+            if (fall(tetromino)){}
+            else {
+                if (add_tetromino(nextTetromino, tetromino)){nextTetromino = choose_teromino();}
+                else {game = 0;}
+            }
 
 
-
+        }
+        
+        this_thread::sleep_for(chrono::milliseconds(150));
+    }
+    return score;
 }
 
 
 int main(){
-    for (int i = 0; i < 20; i++){
+    /*for (int i = 0; i < 20; i++){
         for( int j = 0; j < 10; j++){
             map[i][j] = 0;
         }
@@ -341,12 +400,14 @@ int main(){
         out();
         break;
     case 6:
-        clear();
+        int a = 0;
+        clear(a);
         out();
         break;
     default:
         break;
     }
-    }
-
+    }*/
+    cout << procces();
+    cin >> nextTetromino;
 }
