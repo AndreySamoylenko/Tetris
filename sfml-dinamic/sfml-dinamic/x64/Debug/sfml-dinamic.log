@@ -1,0 +1,25 @@
+﻿  main.cpp
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(114,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(146,31): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(146,28): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(152,38): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(152,31): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(158,37): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(158,30): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(305,47): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(305,39): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(306,68): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(306,53): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(309,54): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(309,39): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(310,68): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(310,53): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(313,54): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(313,39): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(314,68): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(314,53): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(317,55): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(317,40): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(318,69): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\пк\source\repos\sfml-dinamic\main.cpp(318,54): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+  sfml-dinamic.vcxproj -> C:\Users\пк\source\repos\sfml-dinamic\x64\Debug\sfml-dinamic.exe
