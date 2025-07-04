@@ -20,7 +20,16 @@ int tetromino_type = 0;
 int map[WIDTH][HEIGHT] = {0};
 int inputKey = 5;
 int nextTetromino;
+int tetrominos = 0;
+int score = 0;
+int level = 0;
+int lines_total = 0;
+bool canRotate = 1;
 
+int getFallDelay(int level) {
+    int delays[] = {800, 700, 600, 500, 400, 350, 300, 250, 200, 150, 100};
+    return delays[min(level, 10)];
+}
 
 /*консольный вывод поля // для тестов*/
 // Вывод игрового поля
@@ -64,7 +73,9 @@ int clear() {
         }
     }
     out();
-    return static_cast<int>(lines_cleared * lines_cleared * 10);
+    lines_total += lines_cleared;
+    if (lines_cleared == 4) score += 400;
+    return static_cast<int>(lines_cleared * lines_cleared * 100);
 }
 
 /*проверка возможности позиции*/
@@ -195,6 +206,7 @@ bool add_tetromino(int type, int (&tetromino)[4][2]) {
         map[tetromino[i][0]][tetromino[i][1]] = 1;
     }
     out();
+    tetrominos += 1;
     return true;
 }
 
@@ -235,13 +247,7 @@ bool move(int (&tetromino)[4][2], int dx) {
 
 // Поворот фигуры
 bool rotate(int (&tetromino)[4][2], int type) {
-    if (type == 0) return true;
-
-    for (int i = 0; i < 4; i++) {
-        if (tetromino[i][1] >= HEIGHT - 1 || tetromino[i][1] < 1)
-            return false;
-    }
-
+    if (type == 0) return true; 
     for (int i = 0; i < 4; i++) {
         int x = tetromino[i][0];
         int y = tetromino[i][1];
@@ -260,17 +266,26 @@ bool rotate(int (&tetromino)[4][2], int type) {
         new_pos[i][1] = cy + dx;
     }
 
-    if (is_valid_position(new_pos)) {
-        for (int i = 0; i < 4; i++) {
-            tetromino[i][0] = new_pos[i][0];
-            tetromino[i][1] = new_pos[i][1];
-            map[tetromino[i][0]][tetromino[i][1]] = 1;
-        }
-        out();
-        return true;
-    }
+    int dx_try[] = {0, -1, 1, 0};
+    int dy_try[] = {0, 0, 0, -1};
 
-    // Восстановление при неудаче
+    for (int t = 0; t < 4; ++t) {
+        int try_pos[4][2];
+        for (int i = 0; i < 4; i++) {
+            try_pos[i][0] = new_pos[i][0] + dx_try[t];
+            try_pos[i][1] = new_pos[i][1] + dy_try[t];
+        }
+
+        if (is_valid_position(try_pos)) {
+            for (int i = 0; i < 4; i++) {
+                tetromino[i][0] = try_pos[i][0];
+                tetromino[i][1] = try_pos[i][1];
+                map[tetromino[i][0]][tetromino[i][1]] = 1;
+            }
+            out();
+            return true;
+        }
+    }
     for (int i = 0; i < 4; i++) {
         if (tetromino[i][1] >= 0) {
             map[tetromino[i][0]][tetromino[i][1]] = 1;
@@ -306,26 +321,23 @@ bool inputs(int intput){
 //!!!! нужны нормальные
 
 void updateInput() {
-
+    
     while (true) {
-
         if (GetAsyncKeyState('W') & 0x8000) {
-            inputKey = 4; // Поворот
+            if (canRotate) {
+                inputKey = 4;
+                canRotate = false;
+            }
+        } else {
+            canRotate = true;
         }
-        else if (GetAsyncKeyState('A') & 0x8000) {
-            inputKey = 2; // Влево
-        }
-        else if (GetAsyncKeyState('D') & 0x8000) {
-            inputKey = 3; // Вправо
-        }
-        else if (GetAsyncKeyState('S') & 0x8000) {
-            inputKey = 1; // Вниз
-        }
-        else if (GetAsyncKeyState(27) & 0x8000) { // ESCAPE
-            inputKey = 0; // Выход из игры
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(80)); // Не забиваем CPU
 
+        if (GetAsyncKeyState('A') & 0x8000) inputKey = 2;
+        else if (GetAsyncKeyState('D') & 0x8000) inputKey = 3;
+        else if (GetAsyncKeyState('S') & 0x8000) inputKey = 1;
+        else if (GetAsyncKeyState(27) & 0x8000) inputKey = 0;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
@@ -340,7 +352,6 @@ int procces(){
     thread inputThread(updateInput);
     inputThread.detach(); // Отвязываем, чтобы он работал параллельно
 
-    int score = 0;
     long nextTime = getTimeMs();
     bool game = 1;
     nextTetromino = choose_teromino();
@@ -351,31 +362,36 @@ int procces(){
     {
         inputs(inputKey);
         inputKey = 5;
-        
+
         long now = getTimeMs();
-        if (now >= nextTime){
-            nextTime = now + 750 - score * 0.5;
-            if (fall(tetromino)){}
+        if (now >= nextTime) {
+            nextTime = now + getFallDelay(level);
+
+            if (fall(tetromino)) {}
             else {
+                
                 score += clear();
-                if (add_tetromino(nextTetromino, tetromino))
-                {
-                nextTetromino = choose_teromino();
+                level = lines_total / 10;
+
+                if (add_tetromino(nextTetromino, tetromino)) {
+                    nextTetromino = choose_teromino();
+                } else {
+                    game = 0;
                 }
-                else {game = 0;}
             }
-
-
         }
-        this_thread::sleep_for(chrono::milliseconds(750 / 5 - score / 10));
+
+        this_thread::sleep_for(chrono::milliseconds(50));
+        out();
     }
+
     return score;
 }
 
 
 int main(){
     // Создаём поток для обработки ввода
-
+    srand(time(0));
 
     cout << procces();
     cin >> nextTetromino;
