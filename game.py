@@ -24,7 +24,7 @@ lines_total = 0
 can_rotate = 1
 
 
-curent_tetromino = 7
+curent_tetromino = 6
 tetromino_line = [0, 1, 2, 3, 4, 5, 6]
 
 def get_fall_delay(level):
@@ -105,8 +105,10 @@ def draw_ui():
     screen.blit(text_score, (WIDTH * CELL_SIZE + 20, 200))
     screen.blit(text_lines, (WIDTH * CELL_SIZE + 20, 230))
 
+
 def out():
     screen.fill((0, 0, 0))
+
     
     for x in range(WIDTH):
         for y in range(HEIGHT):
@@ -115,8 +117,11 @@ def out():
                 pygame.draw.rect(screen, (217, 217, 217), rect)
                 pygame.draw.rect(screen, (84, 82, 91), rect, 3)
 
-    pygame.draw.rect(screen, (255, 255, 255), (0, 0, WIDTH * CELL_SIZE, HEIGHT * CELL_SIZE), 2)
-
+    grid_color = (25, 25, 25)  
+    for x in range(WIDTH + 1):
+        pygame.draw.line(screen, grid_color, (x * CELL_SIZE, 0), (x * CELL_SIZE, WINDOW_HEIGHT))
+    for y in range(HEIGHT + 1):
+        pygame.draw.line(screen, grid_color, (0, y * CELL_SIZE), (WINDOW_WIDTH, y * CELL_SIZE))
     draw_next_tetromino()
     draw_ui()
     pygame.display.flip()
@@ -178,7 +183,7 @@ def fall(tetromino_pos):
 def choose_tetromino():
     global curent_tetromino, tetromino_line
     
-    if curent_tetromino == 7:
+    if curent_tetromino == 6:
         random.shuffle(tetromino_line)
         curent_tetromino = -1
     
@@ -395,5 +400,5 @@ if __name__ == "__main__":
     show_start_screen()
     random.seed(time.time())
     score = process()
-    show_game_over_screen(score)
+    show_game_over_screen()
     pygame.quit()
