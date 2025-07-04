@@ -266,21 +266,30 @@ bool rotate(int (&tetromino)[4][2], int type) {
         new_pos[i][1] = cy + dx;
     }
 
+    for (int i = 0; i < 4; i++) {
+        if (new_pos[i][0] < 0 || new_pos[i][0] >= WIDTH || new_pos[i][1] >= HEIGHT)
+            return false;
+    }
+
     int dx_try[] = {0, -1, 1, 0};
     int dy_try[] = {0, 0, 0, -1};
 
     for (int t = 0; t < 4; ++t) {
         int try_pos[4][2];
+        bool out_of_top = false;
         for (int i = 0; i < 4; i++) {
             try_pos[i][0] = new_pos[i][0] + dx_try[t];
             try_pos[i][1] = new_pos[i][1] + dy_try[t];
+            if (try_pos[i][1] < -1) out_of_top = true;
         }
+        if (out_of_top) continue;
 
         if (is_valid_position(try_pos)) {
             for (int i = 0; i < 4; i++) {
                 tetromino[i][0] = try_pos[i][0];
                 tetromino[i][1] = try_pos[i][1];
-                map[tetromino[i][0]][tetromino[i][1]] = 1;
+                if (tetromino[i][1] >= 0)
+                    map[tetromino[i][0]][tetromino[i][1]] = 1;
             }
             out();
             return true;
@@ -291,7 +300,6 @@ bool rotate(int (&tetromino)[4][2], int type) {
             map[tetromino[i][0]][tetromino[i][1]] = 1;
         }
     }
-
     return false;
 }
 
@@ -392,7 +400,13 @@ int procces(){
 int main(){
     // Создаём поток для обработки ввода
     srand(time(0));
+    procces();
+    system("cls");    
+    cout << score;
 
-    cout << procces();
+    system("cls"); 
+    out();
+    cout << score;
+    
     cin >> nextTetromino;
 }
