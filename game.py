@@ -16,9 +16,8 @@ WINDOW_HEIGHT = HEIGHT * CELL_SIZE
 tetromino = [[0, 0] for _ in range(4)]
 tetromino_type = 0
 map_field = [[0 for _ in range(HEIGHT)] for _ in range(WIDTH)]
-input_key = 5
+input_key = 8
 next_tetromino = 0
-tetrominos_count = 0
 score = 0
 level = 0
 lines_total = 0
@@ -27,9 +26,6 @@ can_rotate = 1
 
 curent_tetromino = 13
 tetromino_line = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]
-
-
-
 
 def get_fall_delay(level):
     delays = [800, 700, 600, 500, 400, 350, 300, 250, 200, 150, 100]
