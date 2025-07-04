@@ -24,8 +24,8 @@ lines_total = 0
 can_rotate = 1
 
 
-curent_tetromino = 13
-tetromino_line = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6]
+curent_tetromino = 7
+tetromino_line = [0, 1, 2, 3, 4, 5, 6]
 
 def get_fall_delay(level):
     delays = [800, 700, 600, 500, 400, 350, 300, 250, 200, 150, 100]
@@ -178,7 +178,7 @@ def fall(tetromino_pos):
 def choose_tetromino():
     global curent_tetromino, tetromino_line
     
-    if curent_tetromino == 13:
+    if curent_tetromino == 7:
         random.shuffle(tetromino_line)
         curent_tetromino = -1
     
@@ -237,7 +237,6 @@ def add_tetromino(type_, tetromino_pos):
         map_field[x][y] = 1
 
     out()
-    tetrominos_count += 1
     return 1
 
 def move(tetromino_pos, dx):
@@ -354,16 +353,17 @@ def process():
 
     next_time = get_time_ms()
     game = True
+
     next_tetromino = choose_tetromino()
     if not add_tetromino(next_tetromino, tetromino):
         return 0
     next_tetromino = choose_tetromino()
+    out() 
 
     while game:
         update_input()
 
         if input_key == 0:
-            game = False
             break
 
         inputs(input_key)
@@ -381,19 +381,19 @@ def process():
                     game = False
                 else:
                     next_tetromino = choose_tetromino()
+                    out()
 
         time.sleep(0.05)
 
     return score
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH * CELL_SIZE + 150, HEIGHT * CELL_SIZE))
-pygame.display.set_caption("Tetris")
-
-
 if __name__ == "__main__":
-    random.seed(time.time())
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH * CELL_SIZE + 150, HEIGHT * CELL_SIZE))
+    pygame.display.set_caption("Тетрис")
+
     show_start_screen()
-    process()
-    show_game_over_screen()
+    random.seed(time.time())
+    score = process()
+    show_game_over_screen(score)
     pygame.quit()
