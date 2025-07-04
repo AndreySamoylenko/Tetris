@@ -33,7 +33,7 @@ def get_fall_delay(level):
 
 def show_start_screen():
     screen.fill((0, 0, 0))
-    font_title = pygame.font.SysFont("Arial", 48, bold=True)
+    font_title = pygame.font.SysFont("Sans", 48, bold=True)
     font_text = pygame.font.SysFont("Arial", 28)
 
     text1 = font_title.render("TETRIS", True, (65, 225, 255))
