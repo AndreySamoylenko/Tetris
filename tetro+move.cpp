@@ -158,8 +158,8 @@ bool add_tetromino(int type, int (&tetromino)[4][2]) {
             break;
         case 2: // L
             tetromino[0][0] = 4; tetromino[0][1] = 0;
-            tetromino[1][0] = 5; tetromino[1][1] = 0;
-            tetromino[2][0] = 6; tetromino[2][1] = 0;
+            tetromino[1][0] = 6; tetromino[1][1] = 0;
+            tetromino[2][0] = 5; tetromino[2][1] = 0;
             tetromino[3][0] = 6; tetromino[3][1] = 1;
             break;
         case 3: // J
@@ -170,9 +170,9 @@ bool add_tetromino(int type, int (&tetromino)[4][2]) {
             break;
         case 4: // S
             tetromino[0][0] = 5; tetromino[0][1] = 0;
-            tetromino[1][0] = 6; tetromino[1][1] = 0;
+            tetromino[1][0] = 5; tetromino[1][1] = 1;
             tetromino[2][0] = 4; tetromino[2][1] = 1;
-            tetromino[3][0] = 5; tetromino[3][1] = 1;
+            tetromino[3][0] = 6; tetromino[3][1] = 0;
             break;
         case 5: // Z
             tetromino[0][0] = 4; tetromino[0][1] = 0;
@@ -235,7 +235,12 @@ bool move(int (&tetromino)[4][2], int dx) {
 
 // Поворот фигуры
 bool rotate(int (&tetromino)[4][2], int type) {
-    if (type == 0) return true; 
+    if (type == 0) return true;
+
+    for (int i = 0; i < 4; i++) {
+        if (tetromino[i][1] >= HEIGHT - 1 || tetromino[i][1] < 1)
+            return false;
+    }
 
     for (int i = 0; i < 4; i++) {
         int x = tetromino[i][0];
@@ -255,27 +260,17 @@ bool rotate(int (&tetromino)[4][2], int type) {
         new_pos[i][1] = cy + dx;
     }
 
-    int dx_try[] = {0, -1, 1, 0};
-    int dy_try[] = {0, 0, 0, -1};
-
-    for (int t = 0; t < 4; ++t) {
-        int try_pos[4][2];
+    if (is_valid_position(new_pos)) {
         for (int i = 0; i < 4; i++) {
-            try_pos[i][0] = new_pos[i][0] + dx_try[t];
-            try_pos[i][1] = new_pos[i][1] + dy_try[t];
+            tetromino[i][0] = new_pos[i][0];
+            tetromino[i][1] = new_pos[i][1];
+            map[tetromino[i][0]][tetromino[i][1]] = 1;
         }
-
-        if (is_valid_position(try_pos)) {
-            for (int i = 0; i < 4; i++) {
-                tetromino[i][0] = try_pos[i][0];
-                tetromino[i][1] = try_pos[i][1];
-                map[tetromino[i][0]][tetromino[i][1]] = 1;
-            }
-            out();
-            return true;
-        }
+        out();
+        return true;
     }
 
+    // Восстановление при неудаче
     for (int i = 0; i < 4; i++) {
         if (tetromino[i][1] >= 0) {
             map[tetromino[i][0]][tetromino[i][1]] = 1;
