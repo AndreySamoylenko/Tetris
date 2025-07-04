@@ -36,7 +36,7 @@ def show_start_screen():
     font_title = pygame.font.SysFont("Arial", 48, bold=True)
     font_text = pygame.font.SysFont("Arial", 28)
 
-    text1 = font_title.render("ТЕТРИС", True, (255, 255, 255))
+    text1 = font_title.render("TETRIS", True, (65, 225, 255))
     text2 = font_text.render("Нажмите ENTER для начала", True, (200, 200, 200))
 
     screen.blit(text1, ((WINDOW_WIDTH + 150) // 2 - text1.get_width() // 2, 180))
@@ -77,7 +77,7 @@ def draw_next_tetromino():
     preview_size = 120
     block_size = 20
 
-    pygame.draw.rect(screen, (255, 255, 255), (base_x - 10, base_y - 10, preview_size, preview_size), 2)
+    pygame.draw.rect(screen, (65, 225, 255), (base_x - 10, base_y - 10, preview_size, preview_size), 2)
 
     types = [
         [[0, 0], [1, 0], [0, 1], [1, 1]],      # O
