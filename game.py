@@ -307,13 +307,11 @@ def rotate(tetromino_pos, type_):
                 x, y = tetromino_pos[i]
                 map_field[x][y] = 1
             out()
-            return 1
 
     for i in range(4):
         x, y = tetromino_pos[i]
         if y >= 0:
             map_field[x][y] = 1
-    return 0
 
 def inputs(input_val):
     if input_val == 1:
@@ -324,8 +322,6 @@ def inputs(input_val):
         return move(tetromino, 1)
     elif input_val == 4:
         return rotate(tetromino, tetromino_type)
-    else:
-        return 1
 
 def update_input():
     global input_key, can_rotate
@@ -360,8 +356,8 @@ def process():
     game = True
 
     next_tetromino = choose_tetromino()
-    if not add_tetromino(next_tetromino, tetromino):
-        return 0
+    add_tetromino(next_tetromino, tetromino)
+    
     next_tetromino = choose_tetromino()
     out() 
 
