@@ -1,14 +1,12 @@
 import random
 import time
-import threading
-import os
 import pygame
 
 WIDTH = 10
 HEIGHT = 20
 
 CELL_SIZE = 30
-WINDOW_WIDTH = WIDTH * CELL_SIZE
+WINDOW_WIDTH = WIDTH * CELL_SIZE + 200
 WINDOW_HEIGHT = HEIGHT * CELL_SIZE
 
 
@@ -19,17 +17,16 @@ map_field = [[0 for _ in range(HEIGHT)] for _ in range(WIDTH)]
 input_key = 8
 next_tetromino = 0
 score = 0
-level = 0
 lines_total = 0
 can_rotate = 1
 
-
-curent_tetromino = 6
 tetromino_line = [0, 1, 2, 3, 4, 5, 6]
+curent_tetromino = 6
+
 
 def get_fall_delay(level):
-    delays = [800, 700, 600, 500, 400, 350, 300, 250, 200, 150, 100]
-    return delays[min(level, 10)]
+    delays = [800, 650, 400, 300, 350, 200, 250, 200, 150, 100]
+    return delays[min(level, 9)]
 
 def show_start_screen():
     screen.fill((0, 0, 0))
@@ -39,8 +36,8 @@ def show_start_screen():
     text1 = font_title.render("TETRIS", True, (65, 225, 255))
     text2 = font_text.render("Нажмите ENTER для начала", True, (200, 200, 200))
 
-    screen.blit(text1, ((WINDOW_WIDTH + 150) // 2 - text1.get_width() // 2, 180))
-    screen.blit(text2, ((WINDOW_WIDTH + 150) // 2 - text2.get_width() // 2, 250))
+    screen.blit(text1, ((WINDOW_WIDTH) // 2 - text1.get_width() // 2, 180))
+    screen.blit(text2, ((WINDOW_WIDTH) // 2 - text2.get_width() // 2, 250))
     pygame.display.flip()
     wait_for_enter()
 
@@ -54,9 +51,9 @@ def show_game_over_screen():
     text2 = font_text.render(f"Score: {score} ", True, (255, 255, 255))
     text3 = font_small.render("Нажмите ENTER для выхода", True, (200, 200, 200))
 
-    screen.blit(text1, ((WINDOW_WIDTH + 150) // 2 - text1.get_width() // 2, 160))
-    screen.blit(text2, ((WINDOW_WIDTH + 150) // 2 - text2.get_width() // 2, 230))
-    screen.blit(text3, ((WINDOW_WIDTH + 150) // 2 - text3.get_width() // 2, 280))
+    screen.blit(text1, ((WINDOW_WIDTH) // 2 - text1.get_width() // 2, 160))
+    screen.blit(text2, ((WINDOW_WIDTH) // 2 - text2.get_width() // 2, 230))
+    screen.blit(text3, ((WINDOW_WIDTH) // 2 - text3.get_width() // 2, 280))
     pygame.display.flip()
     wait_for_enter()
 
@@ -72,12 +69,10 @@ def wait_for_enter():
         time.sleep(0.05)
 
 def draw_next_tetromino():
-    base_x = WIDTH * CELL_SIZE + 20
-    base_y = 50
     preview_size = 120
     block_size = 20
 
-    pygame.draw.rect(screen, (65, 225, 255), (base_x - 10, base_y - 10, preview_size, preview_size), 2)
+    pygame.draw.rect(screen, (65, 225, 255), (WIDTH * CELL_SIZE + 10, 40, preview_size, preview_size), 2)
 
     types = [
         [[0, 0], [1, 0], [0, 1], [1, 1]],      # O
@@ -91,8 +86,8 @@ def draw_next_tetromino():
 
     if 0 <= next_tetromino <= 6:
         shape = types[next_tetromino]
-        offset_x = base_x + (preview_size - 4 * block_size) // 2
-        offset_y = base_y + (preview_size - 4 * block_size) // 2
+        offset_x = WIDTH * CELL_SIZE + 20 + (preview_size - 4 * block_size) // 2
+        offset_y = 50 + (preview_size - 4 * block_size) // 2
         for x, y in shape:
             rect = pygame.Rect(offset_x + x * block_size, offset_y + y * block_size, block_size, block_size)
             pygame.draw.rect(screen, (217, 217, 217), rect)
@@ -102,9 +97,19 @@ def draw_ui():
     font = pygame.font.SysFont("Arial", 20)
     text_score = font.render(f"Score: {score}", True, (255, 255, 255))
     text_lines = font.render(f"Lines: {lines_total}", True, (255, 255, 255))
+    input_w = font.render("W - Поворот фигуры", True, (255, 255, 255))
+    input_a = font.render("A - Движение влево", True, (255, 255, 255))
+    input_s = font.render("S - Движение вниз", True, (255, 255, 255))
+    input_d = font.render("D - Движение вправо", True, (255, 255, 255))
+    input_esc = font.render("esc - Выход из игры", True, (255, 255, 255))
+
     screen.blit(text_score, (WIDTH * CELL_SIZE + 20, 200))
     screen.blit(text_lines, (WIDTH * CELL_SIZE + 20, 230))
-
+    screen.blit(input_w, (WIDTH * CELL_SIZE + 20, 260))
+    screen.blit(input_a, (WIDTH * CELL_SIZE + 20, 290))
+    screen.blit(input_s, (WIDTH * CELL_SIZE + 20, 320))
+    screen.blit(input_d, (WIDTH * CELL_SIZE + 20, 350))
+    screen.blit(input_esc, (WIDTH * CELL_SIZE + 20, 380))
 
 def out():
     screen.fill((0, 0, 0))
@@ -121,7 +126,7 @@ def out():
     for x in range(WIDTH + 1):
         pygame.draw.line(screen, grid_color, (x * CELL_SIZE, 0), (x * CELL_SIZE, WINDOW_HEIGHT))
     for y in range(HEIGHT + 1):
-        pygame.draw.line(screen, grid_color, (0, y * CELL_SIZE), (WINDOW_WIDTH, y * CELL_SIZE))
+        pygame.draw.line(screen, grid_color, (0, y * CELL_SIZE), (WINDOW_WIDTH - 200, y * CELL_SIZE))
     draw_next_tetromino()
     draw_ui()
     pygame.display.flip()
@@ -130,10 +135,10 @@ def clear_lines():
     global lines_total, score
     lines_cleared = 0
     for y in range(HEIGHT - 1, -1, -1):
-        line_full = 1
+        line_full = True
         for x in range(WIDTH):
             if not map_field[x][y]:
-                line_full = 0
+                line_full = False
                 break
 
         if line_full:
@@ -258,13 +263,12 @@ def move(tetromino_pos, dx):
             x, y = tetromino_pos[i]
             map_field[x][y] = 1
         out()
-        return 1
     else:
         for i in range(4):
             x, y = tetromino_pos[i]
             if y >= 0:
                 map_field[x][y] = 1
-        return 0
+
 
 def rotate(tetromino_pos, type_):
     global can_rotate
@@ -350,11 +354,7 @@ def get_time_ms():
     return int(time.time() * 1000)
 
 def process():
-    global input_key, next_tetromino, level, score
-
-    input_thread = threading.Thread(target=update_input)
-    input_thread.daemon = True
-    input_thread.start()
+    global input_key, next_tetromino, score
 
     next_time = get_time_ms()
     game = True
@@ -376,29 +376,26 @@ def process():
 
         now = get_time_ms()
         if now >= next_time:
-            next_time = now + get_fall_delay(level)
+            next_time = now + get_fall_delay(lines_total//5)
 
             if not fall(tetromino):
                 score += clear_lines()
-                level = lines_total // 10
-
                 if not add_tetromino(next_tetromino, tetromino):
                     game = False
                 else:
                     next_tetromino = choose_tetromino()
                     out()
 
-        time.sleep(0.05)
-
-    return score
+        time.sleep(0.085)
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH * CELL_SIZE + 150, HEIGHT * CELL_SIZE))
-    pygame.display.set_caption("Тетрис")
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pygame.display.set_caption("Tetris")
 
     show_start_screen()
     random.seed(time.time())
-    score = process()
+    process()
     show_game_over_screen()
+    
     pygame.quit()
